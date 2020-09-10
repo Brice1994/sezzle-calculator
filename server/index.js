@@ -50,7 +50,14 @@ router.post('/expressions', (req, res) => {
   });
 });
 
-
+app.use(express.static("public/index.html"));
+const path = require("path");
+const indexPath = path.resolve(__dirname, "public", "index.html");
+console.log(`Serving index file from: ${indexPath}`);
+app.get("*", (req, res) => {
+  res.sendFile(indexPath);
+})
 app.use('/api', router);
+
 const port = process.env.PORT || API_PORT
 app.listen(port, () => console.log(`LISTENING ON PORT ${port}`));
