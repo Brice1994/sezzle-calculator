@@ -52,5 +52,5 @@ router.post('/expressions', (req, res) => {
 
 
 app.use('/api', router);
-
-app.listen(API_PORT, () => console.log(`LISTENING ON PORT ${API_PORT}`));
+const port = process.env.PORT || API_PORT
+app.listen(port, () => console.log(`LISTENING ON PORT ${port}`));
