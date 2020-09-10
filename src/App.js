@@ -15,7 +15,6 @@ class App extends Component {
     operator: '',
     previousKeyType: ''
   };
-
   componentDidMount() {
     const calculator = document.querySelector('.calculator');
     const keys = calculator.querySelector('.calculator__keys');
@@ -129,15 +128,26 @@ class App extends Component {
   }
 
   getDataFromDb = () => {
-    fetch(`http://localhost:${process.env.PORT || 8080}/api/expressions`)
-    .then((data) => data.json())
-    .then((res) => {
-      this.setState({ calculationLog: res.data.map((d) => d.expression) });
-    });
+    // fetch(`http://localhost:${process.env.PORT || 8080}/api/expressions`)
+    fetch(`https://sezzle-web-calculator.herokuapp.com/api/expressions`, {method: "GET"})
+    .then((data) => {
+      data
+      .text()
+      .then((text) => {
+        console.log(text);
+        try {
+          let parsed = JSON.parse(text);
+          this.setState({ calculationLog: parsed.data.map((d) => d.expression) });
+        } catch (e) {
+          console.error(e);
+        }
+      })
+    })
   };
 
   putDataToDB = (message) => {
-    axios.post(`http://localhost:${process.env.PORT || 8080}/api/expressions`, {
+    axios.post(`https://sezzle-web-calculator.herokuapp.com/api/expressions`, {
+      // axios.post(`http://localhost:${process.env.PORT || 8080}/api/expressions`, {
       expression: message,
     });
   };
