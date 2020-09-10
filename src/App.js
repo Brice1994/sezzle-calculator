@@ -129,7 +129,7 @@ class App extends Component {
 
   getDataFromDb = () => {
     // fetch(`http://localhost:${process.env.PORT || 8080}/api/expressions`)
-    fetch(`https://sezzle-web-calculator.herokuapp.com/api/expressions`, {method: "GET"})
+    fetch(`/api/expressions`, {method: "GET"})
     .then((data) => {
       data
       .text()
@@ -146,7 +146,7 @@ class App extends Component {
   };
 
   putDataToDB = (message) => {
-    axios.post(`https://sezzle-web-calculator.herokuapp.com/api/expressions`, {
+    axios.post(`/api/expressions`, {
       // axios.post(`http://localhost:${process.env.PORT || 8080}/api/expressions`, {
       expression: message,
     });

@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Expression = require('./expression');
 
-const API_PORT = 8080;
+const API_PORT = 5000;
 const app = express();
 app.use(cors());
 const router = express.Router();
