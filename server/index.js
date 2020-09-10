@@ -11,7 +11,7 @@ app.use(cors());
 const router = express.Router();
 
 const dbRoute =
-    `mongodb://${process.env.USER}:${process.env.AUTHKEY}@sezzle-web-calculator-shard-00-00.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-01.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-02.urh1h.mongodb.net:27017/expressions?ssl=true&replicaSet=atlas-qic6uj-shard-0&authSource=admin&retryWrites=true&w=majority`;
+    `mongodb://user:E3jMs33OymDkdoIG@sezzle-web-calculator-shard-00-00.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-01.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-02.urh1h.mongodb.net:27017/expressions?ssl=true&replicaSet=atlas-qic6uj-shard-0&authSource=admin&retryWrites=true&w=majority`;
 console.log(`Route: ${dbRoute}`);
 mongoose.connect(dbRoute, {
   useNewUrlParser: true,
@@ -52,7 +52,7 @@ router.post('/expressions', (req, res) => {
 
 app.use(express.static("public/index.html"));
 const path = require("path");
-const indexPath = path.resolve(__dirname, "public", "index.html");
+const indexPath = path.resolve(__dirname, "../public", "index.html");
 console.log(`Serving index file from: ${indexPath}`);
 app.get("*", (req, res) => {
   res.sendFile(indexPath);
