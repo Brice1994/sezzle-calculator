@@ -128,7 +128,6 @@ class App extends Component {
   }
 
   getDataFromDb = () => {
-    // fetch(`http://localhost:${process.env.PORT || 8080}/api/expressions`)
     fetch(`/api/expressions`, {method: "GET"})
     .then((data) => {
       data
@@ -147,7 +146,6 @@ class App extends Component {
 
   putDataToDB = (message) => {
     axios.post(`/api/expressions`, {
-      // axios.post(`http://localhost:${process.env.PORT || 8080}/api/expressions`, {
       expression: message,
     });
   };
