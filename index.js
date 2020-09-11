@@ -8,7 +8,8 @@ const Expression = require('./expression');
 const API_PORT = 5000;
 const app = express();
 app.use(cors());
-
+console.log(`MongoDB User: ${process.env.USER}`);
+console.log(`MongoDB AuthKey: ${process.env.AUTHKEY}`);
 const dbRoute =
     `mongodb://${process.env.USER}:${process.env.AUTHKEY}@sezzle-web-calculator-shard-00-00.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-01.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-02.urh1h.mongodb.net:27017/expressions?ssl=true&replicaSet=atlas-qic6uj-shard-0&authSource=admin&retryWrites=true&w=majority`;
 console.log(`Route: ${dbRoute}`);
