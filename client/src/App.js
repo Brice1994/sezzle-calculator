@@ -10,30 +10,30 @@ class App extends Component {
     operator: '',
     previousKeyType: '',
     previousCalculation: '',
+    // used to handle decimals
+    currentNumber: ''
   };
   clear = () => {
     this.setState({
       expression: '0',
-      modValue: '',
       operator: '',
       previousKeyType: '',
+      currentNumber: ''
     });
   };
 
-  handleClick = (event) => {
+  handleClick = (keyContent) => {
     function isNumeric(n) {
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
-
-    const keyContent = event.currentTarget.textContent;
     const previousKeyType = this.state.previousKeyType;
-
     if (isNumeric(keyContent)) {
       this.setState({
         expression: `${this.state.expression === '0'
             ? ''
             : this.state.expression}${keyContent}`,
         previousKeyType: 'number',
+        currentNumber: `${this.state.currentNumber}${keyContent}`
       });
     }
     // user pressed an operator
@@ -49,22 +49,22 @@ class App extends Component {
           expression: this.state.expression + keyContent,
           previousKeyType: 'operator',
           operator: keyContent,
+          currentNumber: ""
         });
         break;
       case '.':
-        if (this.state.expression.endsWith('.')) {
+        if (this.state.currentNumber.includes('.')) {
           return;
         }
-        if (this.state.previousKeyType !== "number"){
-          this.setState({
-            expression: this.state.expression + '.',
-          });
-        }
+        this.setState({
+          expression: this.state.expression + '.',
+          currentNumber: `${this.state.currentNumber}.`
+        });
         break;
       case 'AC':
         this.clear();
         break;
-      case '=':
+      case 'Enter':
         if (previousKeyType !== 'number') {
           return;
         }
@@ -85,6 +85,7 @@ class App extends Component {
   };
 
   componentDidMount() {
+    document.addEventListener("keydown", (e) => this.handleClick(e.key))
     this.fetchExpressions();
     if (!this.state.intervalIsSet) {
       let interval = setInterval(this.fetchExpressions, 1000);
@@ -131,7 +132,7 @@ class App extends Component {
       '.',
       'AC',
     ].map((button) => <button
-        onClick={(event) => this.handleClick(event)}>{button}</button>);
+        onClick={(event) => this.handleClick(event.currentTarget.textContent)}>{button}</button>);
     return (
         <div className="calculator">
           <div className="calculator__display">
@@ -139,14 +140,15 @@ class App extends Component {
             <div className="calculator__expression">{this.state.expression}</div>
             <div className="calculator__keys">
               {buttons}
-              <button onClick={(event) => this.handleClick(event)} className="key--equal">=</button>
+              <button onClick={() => this.handleClick("Enter")}
+                      className="key--equal">Enter
+              </button>
             </div>
           </div>
           <div className="calculator__history">
             <h3>History</h3>
-            <ul style={{'list-style-type': 'none'}}>
-              {this.state.calculationLog.map(
-                  (item) => <li id="calculation--log">{item}</li>)}
+            <ul>
+              {this.state.calculationLog.map((item) => <li id="calculation--log">{item}</li>)}
             </ul>
           </div>
         </div>
