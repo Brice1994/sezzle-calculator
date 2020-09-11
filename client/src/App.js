@@ -13,7 +13,8 @@ class App extends Component {
     firstValue: '',
     modValue: '',
     operator: '',
-    previousKeyType: ''
+    previousKeyType: '',
+    clearButtonText: "AC",
   };
   componentDidMount() {
     const calculator = document.querySelector('.calculator');
@@ -104,14 +105,14 @@ class App extends Component {
             axios.post(`/api/expressions`, {
               expression: this.state.expression,
             });
-
             clearResult()
             break;
         }
 
         if (action !== "clear") {
-          const clearBtn = calculator.querySelector('[data-action=clear]');
-          clearBtn.textContent = 'CE';
+          this.setState({
+            clearButtonText: "CE"
+          })
         }
       }
     })
@@ -167,7 +168,7 @@ class App extends Component {
             <button>3</button>
             <button>0</button>
             <button data-action="decimal">.</button>
-            <button data-action="clear">AC</button>
+            <button data-action="clear">{this.state.clearButtonText}</button>
             <button className="key--equal" data-action="calculate">=</button>
           </div>
         </div>
