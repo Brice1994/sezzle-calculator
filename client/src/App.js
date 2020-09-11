@@ -141,15 +141,15 @@ class App extends Component {
             <div className="calculator__keys">
               {buttons}
               <button onClick={() => this.handleClick("Enter")}
-                      className="key--equal">Enter
+                      className="key__equal">Enter
               </button>
             </div>
           </div>
           <div className="calculator__history">
             <h3>History</h3>
-            <ul>
-              {this.state.calculationLog.map((item) => <li id="calculation--log">{item}</li>)}
-            </ul>
+            <div>
+              {this.state.calculationLog.map((item) => <div id="calculation--log">{item}</div>)}
+            </div>
           </div>
         </div>
     );
