@@ -31,7 +31,6 @@ app.get('/api/expressions', (req, res) => {
     if (err) {
       return res.json({ success: false, error: err });
     }
-    console.log(data);
     return res.json({ success: true, data: data });
   }).limit(10);
 });
@@ -41,7 +40,9 @@ app.post('/api/expressions', (req, res) => {
   const { expression } = req.body;
   data.expression = expression;
   data.save((err) => {
-    if (err) return res.json({ success: false, error: err });
+    if (err) {
+      return res.json({ success: false, error: err });
+    }
     return res.json({ success: true });
   });
 });

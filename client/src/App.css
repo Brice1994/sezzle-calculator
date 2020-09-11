@@ -125,12 +125,27 @@ h3 {
     display: grid;
     border-radius: 12px;
     box-shadow: 0 0 40px 0px rgba(0, 0, 0, 0.15);
+    max-height: 100%;
+    max-width: 100%;
 }
 .calculator__history {
     grid-column-start: 2;
     grid-row-start: 1;
-
+    padding-left: 1em;
+    min-width: 50%;
+    max-height: 50%;
+    overflow: hidden;
 }
+.calculator__previous {
+    text-align: right;
+    color: #39afaa;
+    padding: 0.6em .8em;
+    overflow: hidden;
+    min-height: 150px;
+    max-width: 100%;
+    min-width: 100%;
+}
+
 .calculator__display {
     grid-column-start: 1;
     grid-row-start: 1;
@@ -138,6 +153,9 @@ h3 {
     font-size: 2em;
     padding: 0.5em 0.75em;
     text-align: right;
+    overflow: hidden;
+    max-height: inherit;
+    min-width: 50%;
 }
 
 .calculator__keys {
@@ -151,12 +169,6 @@ h3 {
     position: relative;
     text-align: center;
 }
-.calculator__controls {
-    padding: 20px;
-    min-width: 30%;
-    max-width: 50%;
-}
-
 .calculator__keys > *:active::before {
     bottom: 0;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5) inset;
