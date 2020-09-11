@@ -43,9 +43,9 @@ class App extends Component {
         const previousKeyType = this.state.previousKeyType;
         if (isNumeric(keyContent)) {
           if (displayedNum === '0' || previousKeyType === 'operator' || previousKeyType === 'calculate') {
-            this.setState({displayTextContent: keyContent})
+            this.setState({ displayTextContent: keyContent })
           } else {
-            this.setState({displayTextContent: displayedNum + keyContent})
+            this.setState({ displayTextContent: displayedNum + keyContent })
           }
           this.setState({
             expression: this.state.expression + keyContent,
@@ -75,12 +75,12 @@ class App extends Component {
               expression: this.state.expression + "."
             });
             if (previousKeyType === 'operator' || previousKeyType === 'calculate') {
-              this.setState({displayTextContent: "0."})
+              this.setState({ displayTextContent: "0." })
             }
-            this.setState({previousKeyType: "decimal"});
+            this.setState({ previousKeyType: "decimal" });
             break;
           case "AC": clearResult();
-            this.setState({previousKeyType: "clear"});
+            this.setState({ previousKeyType: "clear" });
             break;
           case "CE":
             this.setState({
@@ -94,14 +94,16 @@ class App extends Component {
               return;
             }
             const cleaned = this.state.expression
-            .replace(/x/g, '*')
-            .replace(/÷/g, '/');
+              .replace(/x/g, '*')
+              .replace(/÷/g, '/');
             const result = math.evaluate(cleaned);
             this.setState({
               expression: this.state.expression + ` = ${result}`
             });
             this.state.calculationLog.unshift(this.state.expression);
-            this.putDataToDB(this.state.expression);
+            axios.post(`/api/expressions`, {
+              expression: this.state.expression,
+            });
 
             clearResult()
             break;
@@ -113,9 +115,9 @@ class App extends Component {
         }
       }
     })
-    this.getDataFromDb();
+    this.fetchExpressions();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
+      let interval = setInterval(this.fetchExpressions, 1000);
       this.setState({ intervalIsSet: interval });
     }
   }
@@ -127,59 +129,53 @@ class App extends Component {
     }
   }
 
-  getDataFromDb = () => {
-    fetch(`/api/expressions`, {method: "GET"})
-    .then((data) => {
-      data
-      .text()
-      .then((text) => {
-        console.log(text);
-        try {
-          let parsed = JSON.parse(text);
-          this.setState({ calculationLog: parsed.data.map((d) => d.expression) });
-        } catch (e) {
-          console.error(e);
-        }
+  fetchExpressions = () => {
+    fetch(`/api/expressions`, { method: "GET" })
+      .then((data) => {
+        data
+          .text()
+          .then((text) => {
+            console.log(text);
+            try {
+              let parsed = JSON.parse(text);
+              this.setState({ calculationLog: parsed.data.map((d) => d.expression) });
+            } catch (e) {
+              console.error(e);
+            }
+          })
       })
-    })
-  };
-
-  putDataToDB = (message) => {
-    axios.post(`/api/expressions`, {
-      expression: message,
-    });
   };
 
   render() {
     return (
-        <div className="calculator">
-          <div className="calculator__controls">
-            <div className="calculator__display">{this.state.displayTextContent}</div>
-            <div className="calculator__keys">
-              <button className="key--operator">+</button>
-              <button className="key--operator">-</button>
-              <button className="key--operator">x</button>
-              <button className="key--operator">÷</button>
-              <button>7</button>
-              <button>8</button>
-              <button>9</button>
-              <button>4</button>
-              <button>5</button>
-              <button>6</button>
-              <button>1</button>
-              <button>2</button>
-              <button>3</button>
-              <button>0</button>
-              <button data-action="decimal">.</button>
-              <button data-action="clear">AC</button>
-              <button className="key--equal" data-action="calculate">=</button>
-            </div>
-          </div>
-          <div className="calculator__history">
-            <h3>History</h3>
-            {this.state.calculationLog.map((item) => <div id="calculation--log">{item}</div>)}
+      <div className="calculator">
+        <div className="calculator__controls">
+          <div className="calculator__display">{this.state.displayTextContent}</div>
+          <div className="calculator__keys">
+            <button>+</button>
+            <button>-</button>
+            <button>x</button>
+            <button>÷</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>0</button>
+            <button data-action="decimal">.</button>
+            <button data-action="clear">AC</button>
+            <button className="key--equal" data-action="calculate">=</button>
           </div>
         </div>
+        <div className="calculator__history">
+          <h3>History</h3>
+          {this.state.calculationLog.map((item) => <div id="calculation--log">{item}</div>)}
+        </div>
+      </div>
     );
   }
 }
