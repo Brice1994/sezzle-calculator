@@ -25,7 +25,7 @@ class App extends Component {
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
-    const clearResult = () => {
+    function clearResult() {
       this.setState({
         expression: "",
         displayTextContent: '0',
@@ -35,6 +35,7 @@ class App extends Component {
         previousKeyType: ''
       });
     }
+    
     keys.addEventListener('click', e => {
       if (e.target.matches('button')) {
         const key = e.target;
