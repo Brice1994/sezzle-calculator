@@ -3,6 +3,9 @@ Web application that creates a simple calculator, along with a history log of pa
 Technologies used: Express, ReactJS, MongoDB, Heroku
 
 To fully run this project:
+
+For security reasons, I have placed the mongodb credentials into environment variables, and you will need to contact me in order to get access.
+
 Will need Node/npm.
 
 1. In the top level directory, run npm install.
