@@ -8,9 +8,8 @@ class App extends Component {
   // initialize our state
   state = {
     calculationLog: [],
-    expression: "",
+    expression: "0",
     displayTextContent: '0',
-    firstValue: '',
     modValue: '',
     operator: '',
     previousKeyType: '',
@@ -25,80 +24,61 @@ class App extends Component {
       return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
-    function clearResult() {
+    const clearResult = () => {
       this.setState({
-        expression: "",
+        expression: "0",
         displayTextContent: '0',
-        firstValue: '',
         modValue: '',
         operator: '',
         previousKeyType: ''
       });
     }
-    
+
     keys.addEventListener('click', e => {
       if (e.target.matches('button')) {
         const key = e.target;
-        const action = key.dataset.action;
         const keyContent = key.textContent;
-        const displayedNum = display.textContent;
         const previousKeyType = this.state.previousKeyType;
+        
         if (isNumeric(keyContent)) {
-          if (displayedNum === '0' || previousKeyType === 'operator' || previousKeyType === 'calculate') {
-            this.setState({ displayTextContent: keyContent })
-          } else {
-            this.setState({ displayTextContent: displayedNum + keyContent })
+          if (this.state.expression === "0") {
+            this.setState({expression: ""});
           }
           this.setState({
-            expression: this.state.expression + keyContent,
+            expression: `${this.state.expression}${keyContent}`,
             previousKeyType: 'number'
           });
         }
         // user pressed an operator
         switch (keyContent) {
           case "+": //fallthrough
-          case "-": //fallthrough
-          case "x": //fallthrough
-          case "÷": //fallthrough
+          case "-": 
+          case "*": 
+          case "/": 
             if (previousKeyType !== 'number') {
               return;
             }
             this.setState({
-              displayTextContent: `${this.state.displayTextContent}${keyContent}`,
               expression: this.state.expression + keyContent,
-              firstValue: displayedNum,
               previousKeyType: 'operator',
               operator: keyContent
             });
             break;
           case ".":
-            this.setState({
-              displayTextContent: displayedNum + '.',
-              expression: this.state.expression + "."
-            });
-            if (previousKeyType === 'operator' || previousKeyType === 'calculate') {
-              this.setState({ displayTextContent: "0." })
+            if(this.state.expression.endsWith(".")){
+              return;
             }
-            this.setState({ previousKeyType: "decimal" });
+            this.setState({
+              expression: this.state.expression + ".",
+            });
             break;
           case "AC": clearResult();
-            this.setState({ previousKeyType: "clear" });
-            break;
-          case "CE":
-            this.setState({
-              displayTextContent: "0",
-              previousKeyType: "clear"
-            });
-            key.textContent = 'AC';
             break;
           case "=":
             if (previousKeyType !== 'number') {
               return;
             }
-            const cleaned = this.state.expression
-              .replace(/x/g, '*')
-              .replace(/÷/g, '/');
-            const result = math.evaluate(cleaned);
+            const result = math.evaluate(this.state.expression);
             this.setState({
               expression: this.state.expression + ` = ${result}`
             });
@@ -108,12 +88,6 @@ class App extends Component {
             });
             clearResult()
             break;
-        }
-
-        if (action !== "clear") {
-          this.setState({
-            clearButtonText: "CE"
-          })
         }
       }
     })
@@ -137,7 +111,6 @@ class App extends Component {
         data
           .text()
           .then((text) => {
-            console.log(text);
             try {
               let parsed = JSON.parse(text);
               this.setState({ calculationLog: parsed.data.map((d) => d.expression) });
@@ -152,12 +125,12 @@ class App extends Component {
     return (
       <div className="calculator">
         <div className="calculator__controls">
-          <div className="calculator__display">{this.state.displayTextContent}</div>
+          <div className="calculator__display">{this.state.expression}</div>
           <div className="calculator__keys">
             <button>+</button>
             <button>-</button>
-            <button>x</button>
-            <button>÷</button>
+            <button>*</button>
+            <button>/</button>
             <button>7</button>
             <button>8</button>
             <button>9</button>
@@ -169,7 +142,7 @@ class App extends Component {
             <button>3</button>
             <button>0</button>
             <button data-action="decimal">.</button>
-            <button data-action="clear">{this.state.clearButtonText}</button>
+            <button data-action="clear">AC</button>
             <button className="key--equal" data-action="calculate">=</button>
           </div>
         </div>
