@@ -7,17 +7,13 @@ class App extends Component {
   state = {
     calculationLog: [],
     expression: '0',
-    displayTextContent: '0',
-    modValue: '',
     operator: '',
     previousKeyType: '',
-    clearButtonText: 'AC',
     previousCalculation: '',
   };
   clear = () => {
     this.setState({
       expression: '0',
-      displayTextContent: '0',
       modValue: '',
       operator: '',
       previousKeyType: '',
@@ -59,9 +55,11 @@ class App extends Component {
         if (this.state.expression.endsWith('.')) {
           return;
         }
-        this.setState({
-          expression: this.state.expression + '.',
-        });
+        if (this.state.previousKeyType !== "number"){
+          this.setState({
+            expression: this.state.expression + '.',
+          });
+        }
         break;
       case 'AC':
         this.clear();
