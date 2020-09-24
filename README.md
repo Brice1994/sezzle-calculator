@@ -14,4 +14,4 @@ Will need Node/npm.
 4. While in the client directory, run "npm run build".
 5. Open a browser to localhost:5000, you should see the application.
 
-Alternatively, to simply view the application you can visit: https://sezzle-web-calculator.herokuapp.com/ where it is hosted.
+Alternatively, to simply view the application you can visit: https://brice-web-calc.herokuapp.com/ where it is hosted.
