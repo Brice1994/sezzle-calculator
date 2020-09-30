@@ -1,3 +1,4 @@
+console.dir(require("ip").address());
 const mongoose = require('mongoose');
 const express = require('express');
 var cors = require('cors');
@@ -18,7 +19,6 @@ mongoose.connect(dbRoute, {
 });
 
 let db = mongoose.connection;
-
 db.once('open', () => console.log('connected to the database'));
 db.on('error', () => console.error('MongoDB connection error:'));
 
